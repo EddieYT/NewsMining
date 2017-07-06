@@ -28,12 +28,11 @@ soup_news = bs(html.read(), "html.parser")
 all_paths = get_links(paper_names, published_dates, soup_news)
 
 # Extract the outline for each newspaper only once, skip the repeated names with a empty path
-results = []
+results = {"Name": [], "Alternative Titles": [], "Geographic Coverage": [],
+                "Dates of Publication": [], "Frequency": [], "Language": []}
 for i in range(len(paper_names)):
     cur_name = paper_names[i]
     if all_paths[i] is not None:
-        attr = {"Name": cur_name, "Alternative Titles": None, "Geographic Coverage": None,
-                "Dates of Publication": None, "Frequency": None, "Language": None}
         html = urlopen(all_paths[i])
         soup = bs(html.read(), "html.parser")
         if soup.find("dt", string="Alternative Titles:"):
@@ -57,22 +56,21 @@ for i in range(len(paper_names)):
 
         # Find geographic coverage using regex
         geo = soup.find("dt", string="Geographic coverage:").find_next_sibling().find_all("li")
-        geo = re.findall(r"<li>([\s\w,]+)\|", str(geo))
+        geo = re.findall(r"<li>([\s\w,']+)", str(geo))
         for j in range(len(geo)):
             geo[j] = geo[j].replace("\n", "").replace("\xa0", "").replace(" ", "")
-        geo = ",".join(geo)
         # Find dates, frequency and language
         publication = soup.find("dt", string="Dates of publication:").find_next_sibling().string.strip()
         freq = soup.find("dt", string="Frequency:").find_next_sibling().string.strip()
         freq = re.search("\w+\s*", freq).group(0).strip()
         lang = soup.find("dt", string="Language:").find_next_sibling().ul.li.dd.string.strip()
 
-        attr["Alternative Titles"] = alt
-        attr["Geographic Coverage"] = geo
-        attr["Dates of Publication"] = publication
-        attr["Frequency"] = freq
-        attr["Language"] = lang
-        results.append(attr)
+        results["Name"].append(cur_name)
+        results["Alternative Titles"].append(alt)
+        results["Geographic Coverage"].append(geo)
+        results["Dates of Publication"].append(publication)
+        results["Frequency"].append(freq)
+        results["Language"].append(lang)
     else:
         continue
 
