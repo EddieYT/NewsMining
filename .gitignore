@@ -1,0 +1,8 @@
+# source data
+*.csv
+*.txt
+*.xlsx
+
+# idea configuration files
+*.iml
+*.xml
