@@ -3,9 +3,9 @@
 1. “scraping.py” is a package used for retrieving all the links of unique newspapers from source file.  
 **_Unique_** means the newspaper has a unique publication date duration and name pairs.
 
-* During this step, the repeated names are excluded and they are searched in [chroniclingamerica](http://chroniclingamerica.loc.gov/newspapers/) page to match their names(case insensitive) with the texts in html elements.
+	* During this step, the repeated names are excluded and they are searched in [chroniclingamerica](http://chroniclingamerica.loc.gov/newspapers/) page to match their names(case insensitive) with the texts in html elements.
 
-* I also make sure that the date of input newspaper falls between the searching target’s publication dates.
+	* I also make sure that the date of input newspaper falls between the searching target’s publication dates.
 
 2. “large_scraping.py” is used for scraping information from target page and generating result as an excel file.
 
